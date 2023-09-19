@@ -1,0 +1,305 @@
+VHDL FOR 4 BIT AND, 1 BIT 2-1 MUX, 1 BIT ADDER
+VHDL for ADDER TEST BENCH
+SCREENSHOTS OF SIMULATIONS FOR ALL 3
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+One_Bit_Adder.vhd:
+-------------------------------------------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity One_Bit_Adder is
+    Port ( A : in STD_LOGIC;
+           B : in STD_LOGIC;
+           Cin : in STD_LOGIC;
+           Sum : out STD_LOGIC;
+           Cout : out STD_LOGIC);
+end One_Bit_Adder;
+
+architecture Behavioral of One_Bit_Adder is
+    signal S1, S2, S3 : STD_LOGIC;
+begin
+
+ -- Calculate the sum of the 1-BIT adder.
+        Sum <=  A XOR B XOR Cin;
+        S1 <= A AND B;
+        S2 <= A AND Cin;
+        S3 <= Cin AND B;
+        Cout <= S1 OR S2 OR S3;
+                       
+end Behavioral;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+One_Bit_Adder_TB.vhd:
+-------------------------------------------------------------------------------------------------------------------
+LIBRARY IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity One_Bit_Adder_TB is
+end One_Bit_Adder_TB;
+
+architecture behaviour of One_Bit_Adder_TB is 
+
+	component One_Bit_Adder 
+		port( A, B, Cin         : in  STD_LOGIC;
+	      	Sum, Cout         : out STD_LOGIC );
+	end component;
+
+	-- Specifies which description of the adder you will use.
+	for U1: One_Bit_Adder use entity WORK.One_Bit_Adder;
+
+	-- Create a set of signals which will be associated with both the inputs
+	-- and outputs of the component that we wish to test.
+	signal A_s, B_s	: STD_LOGIC;
+	signal CIN_s	: STD_LOGIC;
+	signal SUM_s	: STD_LOGIC;
+	signal COUT_s	: STD_LOGIC;
+
+	-- This is where the testbench for the BIT_ADDER actually begins.	
+	begin
+	
+	U1: One_Bit_Adder port map (A_s, B_s, CIN_s, SUM_s, COUT_s);
+	
+	-- The process is where the actual testing is done.
+	process
+	begin
+
+		-- Case 0 : 0+0 with carry in of 0.
+		-- Set the signals for the inputs.
+		A_s <= '0';
+		B_s <= '0';
+		CIN_s <= '0';
+
+		wait for 10 ns;
+		assert ( SUM_s = '0'  ) report "Failed Case 0 - SUM" severity error;
+		assert ( COUT_s = '0' ) report "Failed Case 0 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Carry out the same process outlined above for the other 7 cases.
+
+		-- Case 1 : 0+0 with carry in of 1.
+		A_s <= '0';
+		B_s <= '0';
+		CIN_s <= '1';
+		wait for 10 ns;
+		assert ( SUM_s = '1'  ) report "Failed Case 1 - SUM" severity error;
+		assert ( COUT_s = '0' ) report "Failed Case 1 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 2 : 0+1 with carry in of 0.
+		A_s <= '0';
+		B_s <= '1';
+		CIN_s <= '0';
+		wait for 10 ns;
+		assert ( SUM_s = '1'  ) report "Failed Case 2 - SUM" severity error;
+		assert ( COUT_s = '0' ) report "Failed Case 2 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 3 : 0+1 with carry in of 1.
+		A_s <= '0';
+		B_s <= '1';
+		CIN_s <= '1';
+		wait for 10 ns;
+		assert ( SUM_s = '0'  ) report "Failed Case 3 - SUM" severity error;
+		assert ( COUT_s = '1' ) report "Failed Case 3 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 4 : 1+0 with carry in of 0.
+		A_s <= '1';
+		B_s <= '0';
+		CIN_s <= '0';
+		wait for 10 ns;
+		assert ( SUM_s = '1'  ) report "Failed Case 4 - SUM" severity error;
+		assert ( COUT_s = '0' ) report "Failed Case 4 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 5 : 1+0 with carry in of 1.
+		A_s <= '1';
+		B_s <= '0';
+		CIN_s <= '1';
+		wait for 10 ns;
+		assert ( SUM_s = '0'  ) report "Failed Case 5 - SUM" severity error;
+		assert ( COUT_s = '1' ) report "Failed Case 5 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 6 : 1+1 with carry in of 0.
+		A_s <= '1';
+		B_s <= '1';
+		CIN_s <= '0';
+		wait for 10 ns;
+		assert ( SUM_s = '0'  ) report "Failed Case 6 - SUM" severity error;
+		assert ( COUT_s = '1' ) report "Failed Case 6 - COUT" severity error;
+		wait for 40 ns;
+
+		-- Case 7 : 1+1 with carry in of 1.
+		A_s <= '1';
+		B_s <= '1';
+		CIN_s <= '1';
+		wait for 10 ns;
+		assert ( SUM_s = '1'  ) report "Failed Case 7 - SUM" severity error;
+		assert ( COUT_s = '1' ) report "Failed Case 7 - COUT" severity error;
+		wait for 40 ns;
+
+	end process;
+END;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+Onebit_Two_to_One_MUX
+-------------------------------------------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Onebit_Two_to_One_MUX is
+    Port ( sel : in STD_LOGIC;
+           in1 : in STD_LOGIC;
+           in2 : in STD_LOGIC;
+           mux_out : out STD_LOGIC);
+end Onebit_Two_to_One_MUX;
+
+architecture Behavioral of Onebit_Two_to_One_MUX is
+
+begin
+    process(in1,in2,sel) is
+    begin
+        if (sel ='0') then 
+            mux_out <= in1; 
+        else 
+            mux_out <= in2; 
+        end if; 
+    end process;
+    
+end Behavioral;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+1bit_2to1mux_tb
+-------------------------------------------------------------------------------------------------------------------
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+USE ieee.numeric_std.ALL;
+ 
+ENTITY mux_tb IS
+END mux_tb;
+ 
+ARCHITECTURE behavior OF mux_tb IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT Onebit_Two_to_One_MUX
+    PORT(
+         in1 : IN  std_logic;
+         in2 : IN  std_logic;
+		 sel  : in std_logic;	
+         mux_out : out  std_logic
+        );
+    END COMPONENT;
+ 
+   --signals
+   signal in1 : std_logic := '0';
+   signal in2 : std_logic := '0';
+   signal sel: std_logic := '0';
+   signal mux_out : std_logic := '0';
+ 
+   constant tick : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: Onebit_Two_to_One_MUX PORT MAP (
+          in1 => in1,
+          in2 => in2,
+          sel => sel, 
+          mux_out=> mux_out
+         
+        );
+
+   -- Stimulus process
+ drive_in1 : process
+	 begin
+	 wait for (tick*3);
+	 in1<= (not in1);
+	 end process drive_in1;
+ 
+    drive_in2 : process
+	 begin
+	 wait for (tick*5);
+	 in2<= (not in2);
+	 end process drive_in2;
+
+  drive_sel : process
+	 begin
+	 wait for (tick*20);
+	 sel<= (not sel);
+	 end process drive_sel;
+END;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+4 Bit AND GATE
+-------------------------------------------------------------------------------------------------------------------
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
+
+
+entity Four_Bit_AND is
+    generic (
+        WIDTH : natural :=4
+    );
+
+    port (
+        a : in std_logic_vector(0 to WIDTH-1);
+        b : in std_logic_vector(0 to WIDTH-1);
+        q : out std_logic_vector(0 to WIDTH-1)
+    );
+end entity Four_Bit_AND;
+
+
+architecture beh of Four_Bit_AND is
+begin
+    and_bits: process(a, b)
+    begin
+        for i in q'range loop
+            q(i) <= a(i) and b(i);
+        end loop;
+    end process and_bits;
+end architecture beh;
+-------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------
+4 Bit AND GATE Testbench
+-------------------------------------------------------------------------------------------------------------------
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;
+
+
+entity testbench is
+end testbench;
+
+
+architecture beh of testbench is
+    signal a : std_logic_vector(0 to 3) := "0000";
+    signal b : std_logic_vector(0 to 3) := "0000";
+    signal q : std_logic_vector(0 to 3);
+    constant tick : time := 1 us;
+begin
+    wide_AND : entity work.Four_Bit_AND
+    port map (
+        a => a,
+        b => b,
+        q => q
+    );
+
+    drive_a : process
+    begin
+        wait for tick;
+        a <= a + "0001";
+    end process drive_a;
+
+    drive_b : process
+    begin
+        wait for (tick*4);
+        b <= b + "0001";
+    end process drive_b;
+end architecture beh;

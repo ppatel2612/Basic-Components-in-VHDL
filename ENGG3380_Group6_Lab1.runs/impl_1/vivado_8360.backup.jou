@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Thu Jan 19 21:14:40 2023
+# Process ID: 8360
+# Current directory: T:/Xilinx/ISE/ENGG3380_Group6_Lab1/ENGG3380_Group6_Lab1.runs/impl_1
+# Command line: vivado.exe -log Four_Bit_AND.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source Four_Bit_AND.tcl -notrace
+# Log file: T:/Xilinx/ISE/ENGG3380_Group6_Lab1/ENGG3380_Group6_Lab1.runs/impl_1/Four_Bit_AND.vdi
+# Journal file: T:/Xilinx/ISE/ENGG3380_Group6_Lab1/ENGG3380_Group6_Lab1.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source Four_Bit_AND.tcl -notrace
